@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BBY 游戏俱乐部 · 开黑 · 训练 · 赛事协作</title>
+<meta name="description" content="BBY 游戏俱乐部：无畏契约与王者万象棋两个分部，固定车队、系统训练、赛事协作。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2308080A'/%3E%3Cpath d='M32 8 54 20v24L32 56 10 44V20z' fill='%23FFC61C'/%3E%3Cpath d='M32 18 45 25v14L32 46 19 39V25z' fill='%2308080A'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://miaoda.feishu.cn">
+<link rel="preconnect" href="https://sf3-scmcdn-cn.feishucdn.com" crossorigin>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Barlow+Condensed:ital,wght@0,600;1,600&display=swap">
+<style>
+:root{
+  --ink:#08080A;
+  --ink-soft:#0E0E11;
+  --panel:#15151A;
+  --amber:#FFC61C;
+  --amber-deep:#D9A400;
+  --bone:#EFEBDF;
+  --muted:rgba(239,235,223,.60);
+  --line:rgba(239,235,223,.14);
+  --line-strong:rgba(239,235,223,.26);
+  --pad:24px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--ink);
+  color:var(--bone);
+  font-family:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  font-size:16px;
+  line-height:1.78;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:70;
+  pointer-events:none;
+  opacity:.04;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+img{max-width:100%}
+a{color:inherit}
+.wrap{width:100%;max-width:1240px;margin-inline:auto;padding-inline:var(--pad)}
+@media (min-width:768px){:root{--pad:48px}}
+
+/* ===== 导航 ===== */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:60;
+  background:rgba(8,8,10,.78);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--line);
+}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand img{width:34px;height:34px;mix-blend-mode:screen;flex:none}
+.brand-txt{display:flex;flex-direction:column;line-height:1.15}
+.brand-txt strong{font-size:15px;font-weight:900;letter-spacing:.02em}
+.brand-txt em{font-style:normal;font-size:10.5px;letter-spacing:.18em;color:var(--muted)}
+.nav-links{display:none;align-items:center;gap:32px}
+@media (min-width:880px){.nav-links{display:flex}}
+.nav-links a{
+  position:relative;text-decoration:none;font-size:14.5px;color:var(--muted);
+  padding:6px 0;transition:color .2s ease;
+}
+.nav-links a:hover,.nav-links a.active{color:var(--bone)}
+.nav-links a.active::after{
+  content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--amber);
+}
+.nav-cta{
+  display:inline-flex;align-items:center;gap:8px;flex:none;
+  border:1px solid var(--amber);background:var(--amber);color:#0A0A0A;
+  font-family:inherit;font-size:13.5px;font-weight:700;letter-spacing:.04em;
+  padding:9px 16px;min-height:40px;cursor:pointer;
+  transition:background .2s ease,color .2s ease;
+}
+.nav-cta:hover{background:transparent;color:var(--amber)}
+@media (max-width:420px){.nav-cta span{display:none}.nav-cta{padding:9px 12px}}
+
+/* ===== 首屏 ===== */
+.hero{
+  position:relative;
+  padding-top:124px;
+  padding-bottom:72px;
+  overflow:hidden;
+  border-bottom:1px solid var(--line);
+}
+.hero::before{
+  content:"";position:absolute;inset:-10% -30% auto -30%;height:78%;
+  background-image:repeating-linear-gradient(113deg,rgba(255,198,28,.20) 0 1px,transparent 1px 128px);
+  -webkit-mask-image:linear-gradient(190deg,rgba(0,0,0,.9),transparent 78%);
+  mask-image:linear-gradient(190deg,rgba(0,0,0,.9),transparent 78%);
+  pointer-events:none;
+}
+.hero::after{
+  content:"";position:absolute;right:-8%;top:-6%;width:44vh;height:44vh;max-width:520px;max-height:520px;
+  border:1px solid rgba(255,198,28,.24);
+  clip-path:polygon(50% 0,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);
+  transform:rotate(8deg);
+  pointer-events:none;
+}
+.hero-grid{position:relative;display:grid;grid-template-columns:1fr;gap:28px;align-items:center}
+@media (min-width:900px){.hero-grid{grid-template-columns:1.18fr .82fr;gap:56px;align-items:end}}
+.hero-tag{
+  display:flex;align-items:center;gap:10px;margin-bottom:26px;
+  font-size:13px;letter-spacing:.16em;color:var(--muted);
+}
+.hero-tag i{display:block;width:26px;height:2px;background:var(--amber);flex:none}
+.h1{
+  margin:0 0 26px;
+  font-weight:900;
+  font-size:clamp(36px,8vw,82px);
+  line-height:1.08;
+  letter-spacing:-.015em;
+  transform:skewX(-6deg);
+  transform-origin:left center;
+}
+.h1 span{display:block;color:var(--amber)}
+.h1 span:last-of-type{padding-bottom:.08em}
+.hero-lead{
+  max-width:34em;margin:0 0 34px;font-size:16px;line-height:1.85;color:rgba(239,235,223,.76);
+}
+.hero-actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font-family:inherit;font-size:14.5px;font-weight:700;letter-spacing:.03em;
+  padding:15px 26px;min-height:48px;border:1px solid transparent;cursor:pointer;
+  text-decoration:none;transition:background .22s ease,color .22s ease,border-color .22s ease;
+}
+.btn-solid{background:var(--amber);color:#0A0A0A;border-color:var(--amber)}
+.btn-solid:hover{background:#fff;border-color:#fff}
+.btn-ghost{background:transparent;color:var(--bone);border-color:var(--line-strong)}
+.btn-ghost:hover{border-color:var(--amber);color:var(--amber)}
+.btn svg{width:16px;height:16px;flex:none}
+.hero-art{position:relative;justify-self:center;width:min(440px,78vw)}
+.hero-art img{
+  display:block;width:100%;height:auto;mix-blend-mode:screen;
+  filter:drop-shadow(0 18px 46px rgba(0,0,0,.6));
+}
+.hero-art .ring{
+  position:absolute;inset:-14% ;z-index:-1;
+  border:1px solid rgba(239,235,223,.14);
+  clip-path:polygon(50% 0,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);
+  transform:rotate(-9deg);
+}
+.hero-note{
+  display:flex;flex-wrap:wrap;gap:12px 22px;margin-top:40px;
+  font-size:13px;color:var(--muted);
+}
+.hero-note span{display:inline-flex;align-items:center;gap:8px}
+.hero-note b{color:var(--amber);font-weight:700}
+
+/* ===== 三项主张 ===== */
+.band{border-bottom:1px solid var(--line);background:var(--ink-soft)}
+.band-grid{display:grid;grid-template-columns:1fr}
+@media (min-width:820px){.band-grid{grid-template-columns:repeat(3,1fr)}}
+.band-item{padding:30px 0}
+.band-item+.band-item{border-top:1px solid var(--line)}
+@media (min-width:820px){
+  .band-item{padding:44px 38px;border-top:0}
+  .band-item+ .band-item{border-left:1px solid var(--line)}
+  .band-item:first-child{padding-left:0}
+  .band-item:last-child{padding-right:0}
+}
+.band-item h3{
+  margin:0 0 8px;font-weight:900;font-size:clamp(24px,3.4vw,34px);letter-spacing:.01em;
+  transform:skewX(-5deg);display:inline-block;
+}
+.band-item p{margin:0;font-size:14px;line-height:1.7;color:var(--muted);max-width:26em}
+.band-item b{color:var(--amber)}
+
+/* ===== 通用区块 ===== */
+.section{padding:82px 0;scroll-margin-top:80px}
+@media (min-width:900px){.section{padding:118px 0}}
+.s-kicker{
+  display:flex;width:fit-content;align-items:center;gap:9px;
+  font-size:12.5px;letter-spacing:.14em;color:var(--amber);margin-bottom:20px;
+}
+.s-kicker::before{content:"";width:6px;height:6px;background:var(--amber);flex:none}
+.h2{
+  margin:0;font-weight:900;font-size:clamp(27px,4.6vw,50px);line-height:1.14;letter-spacing:-.01em;
+  transform:skewX(-5deg);transform-origin:left center;display:inline-block;padding-right:.06em;
+  text-wrap:balance;
+}
+.s-intro{margin:22px 0 0;max-width:40em;font-size:16px;line-height:1.9;color:rgba(239,235,223,.72)}
+.s-head{margin-bottom:52px;max-width:900px}
+
+/* ===== 关于 ===== */
+.about-grid{display:grid;grid-template-columns:1fr;gap:40px}
+@media (min-width:920px){.about-grid{grid-template-columns:1.02fr .98fr;gap:72px;align-items:start}}
+.about-copy p{margin:0 0 22px;font-size:16px;line-height:1.92;color:rgba(239,235,223,.80);max-width:36em}
+.about-copy p:first-child::first-letter{font-size:1.02em}
+.about-copy p:last-child{margin-bottom:0}
+.principles{border-top:1px solid var(--line)}
+.principle{display:grid;grid-template-columns:1fr;gap:6px;padding:22px 0;border-bottom:1px solid var(--line)}
+@media (min-width:560px){.principle{grid-template-columns:112px 1fr;gap:18px;align-items:baseline}}
+.principle dt{
+  display:flex;align-items:center;gap:9px;margin:0;font-weight:700;font-size:15.5px;letter-spacing:.02em;
+}
+.principle dt::before{content:"";width:5px;height:5px;background:var(--amber);flex:none}
+.principle dd{margin:0;font-size:14.5px;line-height:1.7;color:var(--muted)}
+
+/* ===== 分部 ===== */
+.squads{display:grid;grid-template-columns:1fr;gap:18px}
+@media (min-width:920px){.squads{grid-template-columns:1fr 1fr;gap:20px}}
+.squad{
+  background:var(--ink-soft);border:1px solid var(--line);border-top:2px solid var(--amber);
+  padding:28px 24px;display:grid;grid-template-columns:1fr;gap:24px;
+}
+@media (min-width:600px){.squad{grid-template-columns:1fr 196px;gap:28px;align-items:start}}
+.squad-tag{
+  display:inline-block;font-size:11.5px;letter-spacing:.1em;color:var(--amber);
+  border:1px solid rgba(255,198,28,.38);padding:3px 9px;margin-bottom:14px;
+}
+.squad h3{margin:0 0 12px;font-size:22px;font-weight:900;letter-spacing:.01em}
+.squad p{margin:0 0 16px;font-size:14.5px;line-height:1.8;color:rgba(239,235,223,.76)}
+.squad-points{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.squad-points li{display:flex;gap:9px;font-size:13px;line-height:1.6;color:var(--muted)}
+.squad-points li::before{content:"";flex:none;width:4px;height:4px;background:var(--amber);margin-top:.6em}
+.squad-contact{display:grid;gap:10px;justify-items:start}
+.qr-frame{background:#fff;padding:10px;width:100%;max-width:196px;line-height:0}
+.qr-frame img{display:block;width:100%;height:auto}
+.squad-contact b{font-size:13.5px;font-weight:700;line-height:1.5}
+.squad-contact span{font-size:12px;line-height:1.65;color:var(--muted)}
+.contact-alt{
+  width:100%;max-width:196px;min-height:196px;padding:18px 14px;
+  border:1px dashed var(--line-strong);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+  text-align:center;font-size:12.5px;line-height:1.7;color:var(--muted);
+}
+.btn-mini{
+  font-family:inherit;font-size:12.5px;font-weight:700;letter-spacing:.02em;
+  background:transparent;color:var(--amber);border:1px solid var(--amber);
+  padding:8px 14px;min-height:36px;cursor:pointer;transition:background .2s ease,color .2s ease;
+}
+.btn-mini:hover{background:var(--amber);color:#0A0A0A}
+
+/* ---- 选手名册 ---- */
+.roster-block{margin-top:22px;border:1px solid var(--line);background:var(--ink-soft);padding:26px 24px 28px}
+.roster-title{
+  display:flex;align-items:center;gap:9px;margin-bottom:20px;
+  font-size:12.5px;letter-spacing:.14em;color:var(--amber);
+}
+.roster-title::before{content:"";width:6px;height:6px;background:var(--amber);flex:none}
+.roster-note{margin:-8px 0 20px;font-size:12.5px;line-height:1.7;color:var(--muted)}
+.roster{display:grid;grid-template-columns:1fr;gap:22px}
+@media (min-width:760px){.roster{grid-template-columns:1fr 1fr;gap:18px}}
+.player{
+  border-top:1px solid var(--line-strong);padding-top:18px;
+  display:grid;grid-template-columns:54px 1fr;grid-template-rows:auto auto auto;
+  gap:6px 16px;align-items:center;
+}
+.mono{
+  grid-row:1 / 4;align-self:center;width:54px;height:60px;
+  background:var(--amber);color:#0A0A0A;
+  clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+  display:grid;place-items:center;font-size:23px;font-weight:900;line-height:1;
+  padding-top:2px;
+}
+.player-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.player-name{font-size:22px;font-weight:900;letter-spacing:.02em;line-height:1.2}
+.player-meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:var(--muted)}
+.player-meta i{font-style:normal;color:rgba(239,235,223,.42);margin-right:6px}
+.player-meta b{font-weight:500;color:var(--bone)}
+.player-tags{display:flex;flex-wrap:wrap;gap:8px}
+.player-tags span{font-size:12px;color:var(--bone);border:1px solid var(--line-strong);padding:4px 10px}
+.player-tags .tag-rank{color:var(--amber);border-color:rgba(255,198,28,.42)}
+
+/* ---- 教练 ---- */
+.coach{
+  display:grid;grid-template-columns:64px 1fr;grid-template-rows:auto auto auto;
+  gap:8px 20px;align-items:center;border-top:1px solid var(--line-strong);padding-top:20px;
+}
+.coach .mono{width:64px;height:71px;font-size:27px}
+.coach-name{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.coach-name b{font-size:24px;font-weight:900;letter-spacing:.02em;line-height:1.2}
+.tag-role{
+  font-size:11.5px;letter-spacing:.06em;color:#0A0A0A;background:var(--amber);
+  padding:3px 9px;line-height:1.5;
+}
+
+/* ===== 图版 ===== */
+.figure{margin:0}
+.figure-media{position:relative;overflow:hidden;border-top:2px solid var(--amber)}
+.figure-media img{display:block;width:100%;height:auto;aspect-ratio:21/9;object-fit:cover;object-position:center 58%}
+.figure-media::after{
+  content:"";position:absolute;inset:auto 0 0 0;height:52%;
+  background:linear-gradient(to top,rgba(8,8,10,.82),transparent);
+  pointer-events:none;
+}
+.figure figcaption{
+  display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 20px;
+  padding-top:14px;font-size:12.5px;color:var(--muted);letter-spacing:.02em;
+}
+.figure figcaption b{color:var(--bone);font-weight:500}
+
+/* ===== 训练体系（反白区） ===== */
+.train{background:var(--amber);color:#0A0A0A;padding:84px 0;scroll-margin-top:80px;position:relative}
+@media (min-width:900px){.train{padding:116px 0}}
+.train .s-kicker{color:#0A0A0A}
+.train .s-kicker::before{background:#0A0A0A}
+.train .h2{color:#0A0A0A}
+.train .s-intro{color:rgba(10,10,10,.72)}
+.train-head{display:grid;grid-template-columns:1fr;gap:24px;align-items:end;margin-bottom:44px}
+@media (min-width:900px){.train-head{grid-template-columns:1.1fr .9fr;gap:56px}}
+.train-meta{
+  font-size:13px;line-height:1.7;color:rgba(10,10,10,.78);
+  border-left:2px solid rgba(10,10,10,.55);padding-left:16px;
+}
+.train-meta b{display:block;font-size:15px;font-weight:900;margin-bottom:4px}
+.steps{display:grid;grid-template-columns:1fr}
+.step{
+  display:grid;grid-template-columns:1fr;gap:8px;
+  padding:26px 0;border-top:1px solid rgba(10,10,10,.28);
+}
+@media (min-width:820px){
+  .step{grid-template-columns:118px 1fr;gap:34px;align-items:start;padding:30px 0}
+}
+.step:last-child{border-bottom:1px solid rgba(10,10,10,.28)}
+.step-num{
+  font-family:"Barlow Condensed","Noto Sans SC",sans-serif;font-style:italic;font-weight:600;
+  font-size:44px;line-height:.95;color:#0A0A0A;letter-spacing:.01em;
+}
+.step-body h3{margin:0 0 7px;font-size:18.5px;font-weight:900;letter-spacing:.01em}
+.step-body p{margin:0;font-size:14.5px;line-height:1.72;color:rgba(10,10,10,.72);max-width:44em}
+.step-body .tag{
+  display:inline-block;margin-top:12px;font-size:12px;letter-spacing:.06em;
+  border:1px solid rgba(10,10,10,.35);padding:4px 10px;
+}
+.train-foot{
+  margin-top:36px;display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px;justify-content:space-between;
+}
+.train-foot p{margin:0;font-size:14px;color:rgba(10,10,10,.75);max-width:30em}
+.train .btn-solid{background:#0A0A0A;color:var(--amber);border-color:#0A0A0A}
+.train .btn-solid:hover{background:#fff;color:#0A0A0A;border-color:#fff}
+
+/* ===== 赛事 ===== */
+.event-grid{display:grid;grid-template-columns:1fr;gap:36px;align-items:start}
+@media (min-width:920px){.event-grid{grid-template-columns:.95fr 1.05fr;gap:64px}}
+.event-media{position:relative;border:1px solid var(--line);overflow:hidden}
+.event-media img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover}
+.event-copy p{font-size:16px;line-height:1.9;color:rgba(239,235,223,.78);margin:0 0 24px;max-width:36em}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 34px}
+.chip{
+  display:inline-flex;align-items:center;gap:8px;font-size:13px;
+  border:1px solid var(--line-strong);padding:7px 13px;color:var(--bone);
+}
+.chip::before{content:"";width:4px;height:4px;background:var(--amber);flex:none}
+.flow{
+  display:grid;grid-template-columns:1fr;gap:1px;background:var(--line);
+  border:1px solid var(--line);margin-top:46px;
+}
+@media (min-width:760px){.flow{grid-template-columns:repeat(5,1fr)}}
+.flow-item{background:var(--ink);padding:20px 20px}
+@media (min-width:760px){.flow-item{padding:22px 20px}}
+.flow-item span{
+  display:block;font-family:"Barlow Condensed",sans-serif;font-style:italic;font-size:12px;
+  letter-spacing:.14em;color:var(--amber);margin-bottom:5px;
+}
+.flow-item b{display:block;font-size:14.5px;font-weight:700}
+.flow-item p{margin:5px 0 0;font-size:12px;line-height:1.6;color:var(--muted)}
+
+/* ===== 加入 ===== */
+.join{background:var(--ink-soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.roles{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:28px}
+@media (min-width:760px){.roles{grid-template-columns:repeat(3,1fr);gap:14px}}
+.role{
+  text-align:left;font-family:inherit;background:transparent;color:var(--bone);
+  border:1px solid var(--line);padding:20px 18px;cursor:pointer;min-height:96px;
+  transition:border-color .2s ease,background .2s ease;
+}
+.role:hover{border-color:var(--line-strong)}
+.role[aria-checked="true"]{border-color:var(--amber);background:rgba(255,198,28,.07)}
+.role b{display:block;font-size:16px;font-weight:900;margin-bottom:6px;letter-spacing:.01em}
+.role span{display:block;font-size:12.5px;line-height:1.6;color:var(--muted)}
+.role[aria-checked="true"] b{color:var(--amber)}
+.reveal-panel{
+  border-top:1px solid var(--line);padding-top:28px;
+  display:grid;grid-template-columns:1fr;gap:22px;
+}
+@media (min-width:820px){.reveal-panel{grid-template-columns:1.15fr .85fr;gap:48px;align-items:start}}
+.reveal-panel h3{margin:0 0 12px;font-size:19px;font-weight:900;letter-spacing:.01em}
+.reveal-panel p{margin:0;font-size:15px;line-height:1.85;color:rgba(239,235,223,.78);max-width:32em}
+.path{display:grid;gap:0;border-top:1px solid var(--line)}
+.path-row{display:grid;grid-template-columns:26px 1fr;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.path-row i{
+  font-family:"Barlow Condensed",sans-serif;font-style:italic;font-size:14px;color:var(--amber);
+}
+.path-row b{font-size:14px;font-weight:500;line-height:1.6}
+.join-foot{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;margin-top:38px}
+.join-foot small{font-size:12.5px;color:var(--muted)}
+
+/* ===== 页脚 ===== */
+.footer{padding:56px 0 40px}
+.footer-top{display:grid;grid-template-columns:1fr;gap:28px;padding-bottom:32px;border-bottom:1px solid var(--line)}
+@media (min-width:820px){.footer-top{grid-template-columns:1fr auto;align-items:end}}
+.footer-brand{display:flex;align-items:center;gap:16px}
+.footer-brand img{width:64px;height:64px;mix-blend-mode:screen;flex:none}
+.footer-brand strong{display:block;font-size:18px;font-weight:900;letter-spacing:.02em}
+.footer-brand em{font-style:normal;font-size:12.5px;color:var(--muted);letter-spacing:.08em}
+.footer-links{display:flex;flex-wrap:wrap;gap:18px 26px;font-size:13.5px}
+.footer-links a{color:var(--muted);text-decoration:none}
+.footer-links a:hover{color:var(--amber)}
+.footer-bottom{
+  display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 24px;
+  padding-top:24px;font-size:12px;color:rgba(239,235,223,.42);
+}
+
+/* ===== 报名弹窗 ===== */
+dialog.apply{
+  width:min(560px,calc(100vw - 32px));max-height:90vh;overflow:auto;
+  background:var(--panel);color:var(--bone);border:1px solid var(--line-strong);
+  padding:0;margin:auto;
+}
+dialog.apply::backdrop{background:rgba(4,4,6,.82);backdrop-filter:blur(6px)}
+.apply-head{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:16px;
+  padding:26px 26px 18px;border-bottom:1px solid var(--line);
+  position:sticky;top:0;background:var(--panel);z-index:2;
+}
+.apply-head h3{margin:0 0 5px;font-size:19px;font-weight:900}
+.apply-head p{margin:0;font-size:12.5px;color:var(--muted)}
+.apply-close{
+  background:transparent;border:1px solid var(--line);color:var(--muted);
+  width:38px;height:38px;flex:none;cursor:pointer;font-size:16px;line-height:1;
+}
+.apply-close:hover{color:var(--amber);border-color:var(--amber)}
+.apply-body{padding:24px 26px 26px;display:grid;gap:16px}
+.field{display:grid;gap:7px}
+.field label{font-size:13px;color:var(--muted);letter-spacing:.02em}
+.field label b{color:var(--amber);font-weight:400}
+.field input,.field textarea,.field select{
+  width:100%;font-family:inherit;font-size:16px;color:var(--bone);
+  background:#0B0B0E;border:1px solid var(--line);padding:11px 12px;min-height:46px;
+  border-radius:0;outline:none;
+}
+.field textarea{min-height:84px;resize:vertical;line-height:1.6}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--amber)}
+.field-row{display:grid;grid-template-columns:1fr;gap:16px}
+@media (min-width:520px){.field-row{grid-template-columns:1fr 1fr}}
+.apply-note{font-size:12px;line-height:1.65;color:rgba(239,235,223,.5);margin:0}
+.apply-actions{display:flex;flex-wrap:wrap;gap:12px}
+.apply-result{
+  display:none;border-top:1px solid var(--line);padding:20px 26px 26px;background:#0B0B0E;
+}
+.apply-result.show{display:block}
+.apply-result h4{margin:0 0 10px;font-size:14px;font-weight:700;color:var(--amber)}
+.apply-result pre{
+  white-space:pre-wrap;word-break:break-word;margin:0 0 14px;padding:14px;
+  border:1px dashed var(--line-strong);font-family:inherit;font-size:13.5px;line-height:1.7;color:var(--bone);
+}
+.toast{
+  position:fixed;left:50%;bottom:32px;transform:translate(-50%,14px);
+  background:var(--amber);color:#0A0A0A;font-size:13.5px;font-weight:700;
+  padding:11px 20px;z-index:90;opacity:0;pointer-events:none;
+  transition:opacity .25s ease,transform .25s ease;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ===== 入场动效 ===== */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 导航 ===== -->
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top" aria-label="BBY 游戏俱乐部首页">
+      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/UX1lbsjPjoHVmLx1jUvcCKaOnte" alt="BBY 游戏俱乐部标志" width="34" height="34">
+      <span class="brand-txt">
+        <strong>BBY 游戏俱乐部</strong>
+        <em>开黑 · 训练 · 赛事协作</em>
+      </span>
+    </a>
+    <nav class="nav-links" aria-label="主导航">
+      <a href="#about">关于</a>
+      <a href="#squads">分部</a>
+      <a href="#training">训练</a>
+      <a href="#events">赛事</a>
+      <a href="#join">加入</a>
+    </nav>
+    <button class="nav-cta" type="button" data-open-apply>申请加入<span> →</span></button>
+  </div>
+</header>
+
+<!-- ===== 首屏 ===== -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-tag"><i></i>BBY ESPORTS CLUB</div>
+        <h1 class="h1">把开黑，<span>打成一支队。</span></h1>
+        <p class="hero-lead">
+          固定的人、固定的时间、每次都讲完的复盘。BBY 游戏俱乐部目前设无畏契约与王者万象棋两个分部，把开黑、训练、赛事都当正事来做——不靠运气赢，靠有人一直在。
+        </p>
+        <div class="hero-actions">
+          <button class="btn btn-solid" type="button" data-open-apply>申请加入<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <a class="btn btn-ghost" href="#training">看训练体系</a>
+        </div>
+        <div class="hero-note">
+          <span><b>开黑</b> 五个位置有人认领</span>
+          <span><b>训练</b> 约战、录像、版本功课</span>
+          <span><b>赛事</b> 报名到战报全程有人管</span>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div class="ring" aria-hidden="true"></div>
+        <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/UX1lbsjPjoHVmLx1jUvcCKaOnte" alt="BBY 游戏俱乐部标志" width="880" height="880">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 三项主张 ===== -->
+<section class="band" aria-label="俱乐部三项主张">
+  <div class="wrap band-grid">
+    <div class="band-item">
+      <h3>开黑</h3>
+      <p>五个位置有人认领，<b>不用每晚重新凑一局</b>。时间写进日程，来不了提前说，比临场拉人可靠。</p>
+    </div>
+    <div class="band-item">
+      <h3>训练</h3>
+      <p>约战、录像、版本功课，<b>把操作练成习惯</b>。训练有内容，复盘有结论，不靠一句“再练练”了事。</p>
+    </div>
+    <div class="band-item">
+      <h3>赛事协作</h3>
+      <p>报名、排期、OB、战报，<b>一条线跑到底</b>。无论是自己上场，还是帮别人把比赛办下来。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 品牌主视觉 ===== -->
+<section class="wrap section" aria-label="俱乐部主视觉" style="padding:64px 0 0">
+  <figure class="figure">
+    <div class="figure-media">
+      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/OPUWbhvdYoY22qx1C74cR0nSn7d" alt="BBY 游戏俱乐部主视觉横幅：黑底黄色几何标志与字样" width="1800" height="1011">
+    </div>
+    <figcaption><span>俱乐部主视觉 · <b>BBY 游戏俱乐部</b></span><span>黑与黄，是这支队伍的底色</span></figcaption>
+  </figure>
+</section>
+
+<!-- ===== 关于 ===== -->
+<section class="section" id="about">
+  <div class="wrap">
+    <div class="s-head reveal">
+      <span class="s-kicker">关于俱乐部</span>
+      <h2 class="h2">从凑不齐的五个人开始</h2>
+      <p class="s-intro">BBY 起初只是几个总凑不齐人的玩家。后来我们把问题拆开：先找到愿意固定出现的人，再把训练排进日程，最后让每一场比赛有人负责到最后。</p>
+    </div>
+    <div class="about-grid">
+      <div class="about-copy reveal">
+        <p>这里没有“大神带飞”的承诺。俱乐部只稳定提供三样东西：靠得住的队友、能执行的训练、真正能上场的比赛。剩下的功课，是每个人自己的。</p>
+        <p>所以我们更看重两件事：你能不能准时出现，你愿不愿意把输的那局讲清楚。段位会被版本带走，习惯不会。</p>
+        <p>两个分部共用同一套流程：先评估、再练、再上场。从主力车队到第一次开黑，谁都不例外。</p>
+      </div>
+      <dl class="principles reveal">
+        <div class="principle"><dt>固定的人</dt><dd>位置有人认领，阵容不靠每天临时拼凑。</dd></div>
+        <div class="principle"><dt>固定的时间</dt><dd>训练日提前定，缺席要说，不默认有人替补。</dd></div>
+        <div class="principle"><dt>只讲问题</dt><dd>复盘说清哪一回合做错了，不评价人。</dd></div>
+        <div class="principle"><dt>有人兜底</dt><dd>报名、约战、录制、剪素材，都有人接住。</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 分部 ===== -->
+<section class="section" id="squads">
+  <div class="wrap">
+    <div class="s-head reveal">
+      <span class="s-kicker">两个分部</span>
+      <h2 class="h2">两条赛道，一套标准</h2>
+      <p class="s-intro">目前设无畏契约与王者万象棋两个分部。项目不同，流程一样：先评估，再练，再上场。</p>
+    </div>
+    <div class="squads">
+      <article class="squad reveal">
+        <div>
+          <span class="squad-tag">战术射击 · 5v5</span>
+          <h3>无畏契约分部</h3>
+          <p>五个位置分工明确：决斗、控场、先锋、哨卫、指挥。训练以约战、录像复盘、地图功课为主，赛前按对手做针对性准备。</p>
+          <ul class="squad-points">
+            <li>位置固定，缺人提前报备</li>
+            <li>地图与阵容功课随版本更新</li>
+            <li>内部联赛与对外约战双线</li>
+          </ul>
+        </div>
+        <div class="squad-contact">
+          <div class="qr-frame">
+            <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/Nmwbb8BERoOyb0xHjsTclOWUnbh" alt="无畏契约分部微信二维码" width="700" height="700">
+          </div>
+          <b>扫码添加 · 无畏契约分部</b>
+          <span>备注「报名 + 位置」，通过更快</span>
+        </div>
+      </article>
+      <article class="squad reveal">
+        <div>
+          <span class="squad-tag">策略对局 · 王者万象棋</span>
+          <h3>王者万象棋分部</h3>
+          <p>对局看重版本理解、阵容运营和心态管理。训练以棋谱复盘、版本功课、内部分组对局为主，尽量把运气的影响压到最低。</p>
+          <ul class="squad-points">
+            <li>版本更新后同步阵容功课</li>
+            <li>关键对局逐回合复盘</li>
+            <li>分组对局，按段位与节奏匹配</li>
+          </ul>
+        </div>
+        <div class="squad-contact">
+          <div class="contact-alt">
+            <span>万象棋扫码入口整理中</span>
+            <button class="btn-mini" type="button" data-open-apply>填写报名卡</button>
+          </div>
+          <b>先用报名卡对接</b>
+          <span>填完由分部负责人联系你</span>
+        </div>
+      </article>
+    </div>
+    <div class="roster-block reveal">
+      <div class="roster-title">无畏契约分部 · 教练</div>
+      <article class="coach">
+        <div class="mono" aria-hidden="true">S</div>
+        <div class="coach-name">
+          <b>ShiRaki</b>
+          <span class="tag-role">教练</span>
+        </div>
+        <div class="player-meta">
+          <span><i>生日</i><b>2005.09.18</b></span>
+          <span><i>国服</i><b>黄金</b></span>
+          <span><i>港服</i><b>未定级</b></span>
+        </div>
+        <div class="player-tags">
+          <span>战术大师</span>
+          <span>绝对阅读</span>
+          <span>经验丰富</span>
+        </div>
+      </article>
+    </div>
+    <div class="roster-block reveal">
+      <div class="roster-title">王者万象棋分部 · 选手名册</div>
+      <p class="roster-note">两名在册选手均为万象棋千分王者，分别主玩国服马克、国服镜。</p>
+      <div class="roster">
+        <article class="player">
+          <div class="mono" aria-hidden="true">胡</div>
+          <div class="player-head">
+            <span class="player-name">胡巴123</span>
+          </div>
+          <div class="player-meta">
+            <span><i>生日</i><b>2006.03.29</b></span>
+            <span><i>分部</i><b>王者万象棋</b></span>
+          </div>
+          <div class="player-tags">
+            <span class="tag-rank">万象棋千分王者</span>
+            <span>国服马克</span>
+          </div>
+        </article>
+        <article class="player">
+          <div class="mono" aria-hidden="true">晶</div>
+          <div class="player-head">
+            <span class="player-name">晶晶少大人</span>
+          </div>
+          <div class="player-meta">
+            <span><i>生日</i><b>2006.01.16</b></span>
+            <span><i>分部</i><b>王者万象棋</b></span>
+          </div>
+          <div class="player-tags">
+            <span class="tag-rank">万象棋千分王者</span>
+            <span>国服镜</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 训练室图版 ===== -->
+<section class="section" aria-label="训练室" style="padding-top:0">
+  <div class="wrap">
+    <figure class="figure reveal">
+      <div class="figure-media">
+        <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/S0EmbmfzroVkahxNyuNcLSLynvg" alt="夜间训练室：五把电竞椅与曲面显示器排开，地面有一道暖黄色灯带" width="1700" height="956">
+      </div>
+      <figcaption><span>训练室 · <b>夜间场</b></span><span>灯只开一道，因为屏幕要亮</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ===== 训练体系 ===== -->
+<section class="train" id="training">
+  <div class="wrap">
+    <div class="train-head">
+      <div class="reveal">
+        <span class="s-kicker">训练体系</span>
+        <h2 class="h2">训练不是加练，<br>是把问题拆开</h2>
+        <p class="s-intro">一个赛季里，我们只关心三件事：你现在在哪、下一步练什么、练完之后有没有变。所有训练都围绕这三件事排。</p>
+      </div>
+      <div class="train-meta reveal">
+        <b>四个阶段，一条线走完</b>
+        从入队到上场，每个阶段都有明确的产出：一份评估、一份训练内容、一次复盘记录、一场真正的比赛。
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <h3>入队评估</h3>
+          <p>位置、英雄池、沟通习惯，先把现状量清楚。评估只做一件事：判断你该从哪一步开始，而不是给你一个排位数字。</p>
+          <span class="tag">产出：个人评估记录</span>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <h3>定制训练</h3>
+          <p>无畏契约按位置给内容：对线细节、团战站位、指挥话术；王者万象棋按版本给功课：阵容运营、经济节奏、对局心态。各练各的，不搞一刀切。</p>
+          <span class="tag">产出：本周训练清单</span>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <h3>逐局复盘</h3>
+          <p>关键局录下来，一回合讲一次决策：为什么这么开、有没有更好的选择。复盘只讲操作和判断，不评价人。</p>
+          <span class="tag">产出：复盘记录</span>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">04</div>
+        <div class="step-body">
+          <h3>上场检验</h3>
+          <p>内部联赛或对外约战，用比赛验证训练结果。打不好不是终点，是下一轮训练的输入。</p>
+          <span class="tag">产出：比赛记录与下一轮计划</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="train-foot reveal">
+      <p>训练内容会随版本调整，但这条线不变：评估、训练、复盘、上场。</p>
+      <button class="btn btn-solid" type="button" data-open-apply>按这条线开始<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 赛事 ===== -->
+<section class="section" id="events">
+  <div class="wrap">
+    <div class="s-head reveal">
+      <span class="s-kicker">赛事协作</span>
+      <h2 class="h2">比赛日，是最像俱乐部的时候</h2>
+      <p class="s-intro">训练的结果只有比赛能验证。两个分部各自排赛程：内部联赛让每个人都有上场机会，对外约战看的是配合与抗压，办赛协作则把整个流程完整跑一遍。</p>
+    </div>
+    <div class="event-grid">
+      <figure class="figure event-media reveal">
+        <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/UHV1bHZQ5oNomOxM9o4cZEThnbb" alt="电竞赛事舞台：暖黄色几何光束打在舞台上，远处是观众席剪影" width="1700" height="956">
+      </figure>
+      <div class="event-copy reveal">
+        <p>一场比赛要跑通的东西比想象中多：报名表、抽签分组、赛程排期、录像与 OB、赛后战报。这些事有人管，选手才能在台上只想着打。</p>
+        <p>我们更愿意把一场比赛办成能被复盘的东西：录像留档、比分留档、问题留档。热闹会过去，记录不会。</p>
+        <div class="chips">
+          <span class="chip">无畏契约 5v5 联赛</span>
+          <span class="chip">王者万象棋 对局赛</span>
+          <span class="chip">对外约战</span>
+          <span class="chip">OB 与战报</span>
+        </div>
+      </div>
+    </div>
+    <div class="flow" aria-label="赛事执行流程">
+      <div class="flow-item"><span>STEP 01</span><b>报名</b><p>收表、核位置、确认可出赛时间</p></div>
+      <div class="flow-item"><span>STEP 02</span><b>分组</b><p>按水平与位置均衡，避免一边倒</p></div>
+      <div class="flow-item"><span>STEP 03</span><b>赛程</b><p>排期公布，提前一天再确认一次</p></div>
+      <div class="flow-item"><span>STEP 04</span><b>OB 直播</b><p>导播、解说、录像落盘</p></div>
+      <div class="flow-item"><span>STEP 05</span><b>战报</b><p>比分、关键局复盘、下场预告</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 加入 ===== -->
+<section class="section join" id="join">
+  <div class="wrap">
+    <div class="s-head reveal">
+      <span class="s-kicker">加入我们</span>
+      <h2 class="h2">三种人，三条路</h2>
+      <p class="s-intro">先选你现在最想要的那件事。不同的起点，进的是同一套流程。</p>
+    </div>
+
+    <div class="roles" role="radiogroup" aria-label="选择你的加入方向">
+      <button class="role" type="button" role="radio" aria-checked="true" data-role="team">
+        <b>想找固定队友</b><span>受够了每晚重新凑人、打到一半有人退</span>
+      </button>
+      <button class="role" type="button" role="radio" aria-checked="false" data-role="skill">
+        <b>想认真练出水平</b><span>有目标，但不知道自己该练什么</span>
+      </button>
+      <button class="role" type="button" role="radio" aria-checked="false" data-role="match">
+        <b>想上场比赛</b><span>想打正式局，不只是排位和娱乐局</span>
+      </button>
+    </div>
+
+    <div class="reveal-panel">
+      <div>
+        <h3 id="role-title">先谈时间，再谈位置</h3>
+        <p id="role-desc">稳定出现比段位重要。说清你一周能来的时间，我们按这个给你排车队——不用你去找人，也不用担心被临时放鸽子。</p>
+      </div>
+      <div class="path" aria-label="加入路径">
+        <div class="path-row"><i>01</i><b>填一张报名卡：昵称、常玩项目、能来的时间</b></div>
+        <div class="path-row"><i>02</i><b>20 分钟语音：聊分部、位置与习惯</b></div>
+        <div class="path-row"><i>03</i><b>一周试训：跟现有车队打几场，双方再决定</b></div>
+      </div>
+    </div>
+
+    <div class="join-foot reveal">
+      <button class="btn btn-solid" type="button" data-open-apply>填写报名卡<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      <small>报名卡会生成一段文字，复制后发给俱乐部负责人即可，本页面不会自动收集你的信息。</small>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 页脚 ===== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/UX1lbsjPjoHVmLx1jUvcCKaOnte" alt="BBY 游戏俱乐部标志" width="64" height="64">
+        <div>
+          <strong>BBY 游戏俱乐部</strong>
+          <em>开黑 · 训练 · 赛事协作</em>
+        </div>
+      </div>
+      <nav class="footer-links" aria-label="页脚导航">
+        <a href="#about">关于</a>
+        <a href="#squads">分部</a>
+        <a href="#training">训练</a>
+        <a href="#events">赛事</a>
+        <a href="#join">加入</a>
+        <a href="#top">回到顶部</a>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 BBY 游戏俱乐部 · 福建 福州</span>
+      <span>本页面用于俱乐部宣传展示，具体安排以俱乐部实际通知为准</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== 报名弹窗 ===== -->
+<dialog class="apply" id="applyDialog" aria-labelledby="applyTitle">
+  <form method="dialog" class="apply-head" id="applyCloseForm">
+    <div>
+      <h3 id="applyTitle">报名卡</h3>
+      <p>填完生成一段文字，复制后发给负责人</p>
+    </div>
+    <button class="apply-close" type="submit" value="close" aria-label="关闭">×</button>
+  </form>
+  <form class="apply-body" id="applyForm" novalidate>
+    <div class="field-row">
+      <div class="field">
+        <label for="f-nick">昵称 <b>*</b></label>
+        <input id="f-nick" name="nick" type="text" autocomplete="nickname" placeholder="平时怎么称呼你" required>
+      </div>
+      <div class="field">
+        <label for="f-time">能稳定的时间 <b>*</b></label>
+        <input id="f-time" name="time" type="text" placeholder="例：工作日 21:30 后 / 周末全天" required>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label for="f-game">常玩项目与位置 <b>*</b></label>
+        <input id="f-game" name="game" type="text" placeholder="例：无畏契约 · 控场 / 万象棋 · 运营" required>
+      </div>
+      <div class="field">
+        <label for="f-contact">联系方式</label>
+        <input id="f-contact" name="contact" type="text" placeholder="微信号或手机号">
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label for="f-division">想加入的分部</label>
+        <select id="f-division" name="division">
+          <option value="无畏契约分部">无畏契约分部</option>
+          <option value="王者万象棋分部">王者万象棋分部</option>
+          <option value="两个都想了解">两个都想了解</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-goal">想加入的方向</label>
+        <select id="f-goal" name="goal">
+          <option value="找固定队友">找固定队友</option>
+          <option value="认真练出水平">认真练出水平</option>
+          <option value="想上场比赛">想上场比赛</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label for="f-intro">一句自我介绍</label>
+      <textarea id="f-intro" name="intro" placeholder="打什么、想练什么、为什么想认真打"></textarea>
+    </div>
+    <p class="apply-note">带 <b style="color:#FFC61C">*</b> 的为必填。信息只在本机生成，不会上传。</p>
+    <div class="apply-actions">
+      <button class="btn btn-solid" type="submit">生成报名卡</button>
+      <button class="btn btn-ghost" type="reset">清空</button>
+    </div>
+  </form>
+  <div class="apply-result" id="applyResult">
+    <h4>报名卡已生成</h4>
+    <pre id="applyText"></pre>
+    <div class="apply-actions">
+      <button class="btn btn-solid" type="button" id="copyBtn">复制内容</button>
+      <button class="btn btn-ghost" type="button" id="redoBtn">重新填写</button>
+    </div>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---- 导航高亮 ---- */
+  var links = Array.prototype.slice.call(document.querySelectorAll('.nav-links a'));
+  var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+  if ('IntersectionObserver' in window && sections.length){
+    var navObs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          links.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id); });
+        }
+      });
+    }, {rootMargin:'-45% 0px -50% 0px', threshold:0});
+    sections.forEach(function(s){ navObs.observe(s); });
+  }
+
+  /* ---- 入场动效 ---- */
+  var reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); }
+      });
+    }, {rootMargin:'0px 0px -8% 0px', threshold:.12});
+    reveals.forEach(function(el){ obs.observe(el); });
+  } else {
+    reveals.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* ---- 加入方向选择 ---- */
+  var roleData = {
+    team:{
+      title:'先谈时间，再谈分工',
+      desc:'稳定出现比段位重要。说清你一周能来的时间，以及想在哪个分部打，我们按这个给你排车队——不用你去找人，也不用担心被临时放鸽子。'
+    },
+    skill:{
+      title:'按分部给训练内容',
+      desc:'无畏契约按位置拆：对线细节、团战站位、指挥话术；王者万象棋按版本拆：阵容运营、经济节奏、对局心态。练完交复盘，不靠一句“再练练”。'
+    },
+    match:{
+      title:'从内部联赛开始上场',
+      desc:'有比赛经验更好，没有也拦不住你。先打分部内部联赛，把赛程、OB、复盘跑一遍；能扛住正式局，再谈对外约战。'
+    }
+  };
+  var roles = Array.prototype.slice.call(document.querySelectorAll('.role'));
+  var roleTitle = document.getElementById('role-title');
+  var roleDesc = document.getElementById('role-desc');
+  var rolePath = document.querySelector('.path');
+  roles.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      roles.forEach(function(b){ b.setAttribute('aria-checked','false'); });
+      btn.setAttribute('aria-checked','true');
+      var d = roleData[btn.dataset.role];
+      roleTitle.textContent = d.title;
+      roleDesc.textContent = d.desc;
+      rolePath.style.opacity = '0';
+      setTimeout(function(){ rolePath.style.opacity = '1'; }, 120);
+      var goal = document.getElementById('f-goal');
+      if(goal){
+        var map = {team:'找固定队友', skill:'认真练出水平', match:'想上场比赛'};
+        goal.value = map[btn.dataset.role];
+      }
+    });
+  });
+
+  /* ---- 弹窗 ---- */
+  var dlg = document.getElementById('applyDialog');
+  var form = document.getElementById('applyForm');
+  var resultBox = document.getElementById('applyResult');
+  var applyText = document.getElementById('applyText');
+  var toast = document.getElementById('toast');
+  var toastTimer;
+
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toast.classList.remove('show'); }, 2200);
+  }
+  function openApply(){
+    resultBox.classList.remove('show');
+    if(typeof dlg.showModal === 'function'){ dlg.showModal(); } else { dlg.setAttribute('open','open'); }
+  }
+  document.addEventListener('click', function(e){
+    var t = e.target.closest ? e.target.closest('[data-open-apply]') : null;
+    if(t){ e.preventDefault(); openApply(); }
+  });
+  dlg.addEventListener('click', function(e){
+    if(e.target === dlg){ dlg.close(); }
+  });
+
+  /* ---- 生成报名卡 ---- */
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var nick = form.nick.value.trim();
+    var time = form.time.value.trim();
+    var game = form.game.value.trim();
+    if(!nick || !time || !game){
+      showToast('昵称、时间、项目位置是必填的');
+      (!nick ? form.nick : (!time ? form.time : form.game)).focus();
+      return;
+    }
+    var contact = form.contact.value.trim();
+    var goal = form.goal.value;
+    var division = form.division.value;
+    var intro = form.intro.value.trim();
+    var lines = [
+      '【BBY 游戏俱乐部 · 报名卡】',
+      '昵称：' + nick,
+      '想加入的分部：' + division,
+      '常玩项目与位置：' + game,
+      '能稳定的时间：' + time,
+      '想加入的方向：' + goal
+    ];
+    if(contact) lines.push('联系方式：' + contact);
+    if(intro) lines.push('自我介绍：' + intro);
+    lines.push('—— 由本人填写，发送给俱乐部负责人');
+    applyText.textContent = lines.join('\n');
+    resultBox.classList.add('show');
+    dlg.scrollTop = dlg.scrollHeight;
+  });
+  form.addEventListener('reset', function(){ resultBox.classList.remove('show'); });
+
+  /* ---- 复制 ---- */
+  document.getElementById('copyBtn').addEventListener('click', function(){
+    var txt = applyText.textContent;
+    function done(){ showToast('已复制，粘贴发给负责人即可'); }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(done).catch(fallback);
+    } else { fallback(); }
+    function fallback(){
+      var ta = document.createElement('textarea');
+      ta.value = txt; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); done(); }catch(err){ showToast('复制失败，请手动选中文字'); }
+      document.body.removeChild(ta);
+    }
+  });
+  document.getElementById('redoBtn').addEventListener('click', function(){
+    resultBox.classList.remove('show');
+    dlg.scrollTop = 0;
+    form.nick.focus();
+  });
+})();
+</script>
+</body>
+</html>
