@@ -41,15 +41,16 @@ body{
 /* ===== 菜单 ===== */
 #menu{overflow-y:auto;justify-content:center;align-items:flex-start;padding:36px 24px 48px}
 .menu-inner{width:min(1080px,100%);margin:auto;position:relative}
-.exit-btn{position:absolute;top:0;right:0;display:flex;align-items:center;gap:7px;
+.exit-btn{position:static;flex:0 0 auto;display:flex;align-items:center;gap:7px;
   padding:9px 14px;border:1px solid var(--line);background:rgba(236,232,225,.03);
   color:var(--muted);font-family:inherit;font-size:12px;letter-spacing:.12em;cursor:pointer;
   transition:border-color .16s,color .16s,background .16s}
 .exit-btn:hover{border-color:var(--red);color:var(--ink);background:rgba(255,70,85,.12)}
 .exit-btn .arrow{font-family:var(--en);font-size:13px;line-height:1}
-.brand-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.brand-slash{font-family:var(--en);font-weight:700;color:var(--red);font-size:18px;letter-spacing:.1em}
-.brand-text{font-family:var(--en);font-size:11.5px;letter-spacing:.34em;color:var(--muted);text-transform:uppercase}
+.menu-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.brand-row{display:flex;align-items:center;gap:10px;flex:1 1 auto;min-width:0}
+.brand-slash{font-family:var(--en);font-weight:700;color:var(--red);font-size:18px;letter-spacing:.1em;flex:0 0 auto}
+.brand-text{display:block;flex:1 1 auto;min-width:0;font-family:var(--en);font-size:11.5px;letter-spacing:.34em;color:var(--muted);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 h1{line-height:.9;margin-bottom:4px}
 .h1-main{display:block;font-family:var(--en);font-weight:700;font-size:clamp(46px,8.4vw,88px);letter-spacing:.04em}
 .h1-sub{display:block;font-family:var(--en);font-size:12px;letter-spacing:.42em;color:var(--red);margin-top:16px}
@@ -181,6 +182,9 @@ h1{line-height:.9;margin-bottom:4px}
 .btn-ghost:hover{color:var(--ink);border-color:rgba(236,232,225,.4)}
 
 @media (max-width:760px){
+  .menu-top{gap:8px}
+  .brand-text{letter-spacing:.22em;font-size:10.5px}
+  .exit-btn{padding:7px 10px;font-size:11px;letter-spacing:.06em;gap:5px}
   .mode-grid{grid-template-columns:1fr}
   .mc-desc{min-height:0}
   .setup-row{grid-template-columns:1fr;gap:16px}
@@ -203,8 +207,10 @@ h1{line-height:.9;margin-bottom:4px}
 <!-- ===== 视图：菜单 ===== -->
 <section id="menu" class="screen active">
   <div class="menu-inner">
-    <div class="brand-row"><span class="brand-slash">//</span><span class="brand-text">Valorant Aim Lab · 练枪房</span></div>
-    <button class="exit-btn" id="exitBtn" type="button"><span>退出游戏</span><span class="arrow">↗</span></button>
+    <div class="menu-top">
+      <div class="brand-row"><span class="brand-slash">//</span><span class="brand-text">Valorant Aim Lab · 练枪房</span></div>
+      <button class="exit-btn" id="exitBtn" type="button"><span>退出游戏</span><span class="arrow">↗</span></button>
+    </div>
     <h1><span class="h1-main">点小球练习</span><span class="h1-sub">RANGE / AIM TRAINER</span></h1>
     <div class="title-rule"></div>
     <p class="lead">瓦罗兰特风格的靶场特训。左键射击靶球，命中越快、越靠近靶心，得分越高。选一套训练模式，把准星压到球心。</p>
