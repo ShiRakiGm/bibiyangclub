@@ -1,1 +1,963 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>点小球练习 · 瓦罗兰特枪法特训</title>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Oswald:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0d1720;
+  --ink:#ece8e1;
+  --red:#ff4655;
+  --red-dim:#c7303d;
+  --cyan:#5bc8d6;
+  --muted:#8996a2;
+  --line:rgba(236,232,225,.14);
+  --line-soft:rgba(236,232,225,.07);
+  --en:'Oswald','Noto Sans SC','PingFang SC',sans-serif;
+}
+html,body{height:100%}
+body{
+  background:var(--bg);color:var(--ink);overflow:hidden;
+  font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;
+  -webkit-font-smoothing:antialiased;user-select:none;
+}
+/* ===== 背景装饰 ===== */
+.bg-grid{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(236,232,225,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(236,232,225,.05) 1px,transparent 1px);
+  background-size:72px 72px;opacity:.55;
+  -webkit-mask-image:radial-gradient(125% 95% at 50% 38%,#000 18%,transparent 76%);
+  mask-image:radial-gradient(125% 95% at 50% 38%,#000 18%,transparent 76%);}
+.bg-glow{position:fixed;pointer-events:none;z-index:0}
+.bg-glow.a{width:62vw;height:62vw;right:-20vw;top:-26vw;background:radial-gradient(circle,rgba(255,70,85,.20),rgba(255,70,85,0) 68%)}
+.bg-glow.b{width:56vw;height:56vw;left:-22vw;bottom:-28vw;background:radial-gradient(circle,rgba(91,200,214,.13),rgba(91,200,214,0) 70%)}
 
+/* ===== 屏幕容器 ===== */
+.screen{position:fixed;inset:0;z-index:1;display:none}
+.screen.active{display:flex}
+
+/* ===== 菜单 ===== */
+#menu{overflow-y:auto;justify-content:center;align-items:flex-start;padding:36px 24px 48px}
+.menu-inner{width:min(1080px,100%);margin:auto;position:relative}
+.brand-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.brand-slash{font-family:var(--en);font-weight:700;color:var(--red);font-size:18px;letter-spacing:.1em}
+.brand-text{font-family:var(--en);font-size:11.5px;letter-spacing:.34em;color:var(--muted);text-transform:uppercase}
+h1{line-height:.9;margin-bottom:4px}
+.h1-main{display:block;font-family:var(--en);font-weight:700;font-size:clamp(46px,8.4vw,88px);letter-spacing:.04em}
+.h1-sub{display:block;font-family:var(--en);font-size:12px;letter-spacing:.42em;color:var(--red);margin-top:16px}
+.title-rule{height:1px;background:linear-gradient(90deg,var(--red),rgba(255,70,85,.12) 46%,transparent 72%);margin:22px 0 18px}
+.lead{max-width:640px;color:var(--muted);font-size:13.5px;line-height:1.9;letter-spacing:.02em}
+
+.section-label{display:flex;align-items:center;gap:10px;margin:26px 0 12px}
+.section-num{font-family:var(--en);font-size:11px;color:var(--red);letter-spacing:.1em;padding:2px 6px;border:1px solid rgba(255,70,85,.4)}
+.section-text{font-size:12px;letter-spacing:.2em;color:var(--ink);opacity:.78}
+
+.mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.mode-card{
+  position:relative;text-align:left;padding:20px 18px 18px;border:1px solid var(--line);
+  background:linear-gradient(160deg,rgba(236,232,225,.055),rgba(236,232,225,.014) 60%,rgba(236,232,225,.02));
+  color:var(--ink);font-family:inherit;cursor:pointer;overflow:hidden;
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%);
+  transition:transform .16s ease,background .2s,border-color .2s,box-shadow .2s;
+}
+.mode-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;transition:background .2s}
+.mode-card:hover{transform:translateY(-2px);border-color:rgba(236,232,225,.3);background:linear-gradient(160deg,rgba(236,232,225,.09),rgba(236,232,225,.03))}
+.mode-card.on{border-color:rgba(255,70,85,.85);background:linear-gradient(160deg,rgba(255,70,85,.16),rgba(255,70,85,.03) 65%,rgba(236,232,225,.02));box-shadow:0 0 0 1px rgba(255,70,85,.15) inset,0 8px 26px rgba(0,0,0,.35)}
+.mode-card.on::before{background:var(--red)}
+.mc-en{display:block;font-family:var(--en);font-size:10.5px;letter-spacing:.3em;color:var(--red);margin-bottom:10px}
+.mc-name{display:block;font-family:var(--en);font-size:22px;font-weight:600;letter-spacing:.06em;line-height:1.1}
+.mc-desc{display:block;margin-top:10px;font-size:12px;line-height:1.75;color:var(--muted);min-height:42px}
+.mc-index{position:absolute;top:14px;right:14px;font-family:var(--en);font-size:11px;color:rgba(236,232,225,.32);letter-spacing:.08em}
+.mc-tag{display:inline-block;margin-top:12px;font-size:10px;letter-spacing:.14em;color:rgba(236,232,225,.55);border:1px solid var(--line);padding:3px 7px}
+
+.setup-row{display:grid;grid-template-columns:1.05fr 1.05fr .9fr;gap:22px;align-items:end}
+.seg{display:flex;gap:8px;flex-wrap:wrap}
+.seg-btn{padding:9px 18px;background:transparent;border:1px solid var(--line);color:var(--muted);
+  font-family:'Noto Sans SC',sans-serif;font-size:12.5px;letter-spacing:.06em;cursor:pointer;transition:.16s;
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%)}
+.seg-btn:hover{color:var(--ink);border-color:rgba(236,232,225,.34)}
+.seg-btn.on{color:var(--ink);border-color:var(--red);background:rgba(255,70,85,.12)}
+.best-col{display:flex;flex-direction:column;align-items:flex-end;gap:2px;padding-bottom:2px}
+.best-label{font-size:10.5px;letter-spacing:.18em;color:var(--muted)}
+.best-value{font-family:var(--en);font-size:30px;font-weight:600;line-height:1.1}
+
+.btn-primary{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;
+  margin-top:26px;padding:0 26px;height:62px;border:0;background:var(--red);color:#12181d;
+  font-family:var(--en);font-size:18px;font-weight:600;letter-spacing:.16em;cursor:pointer;
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%);
+  transition:transform .14s,filter .2s;box-shadow:0 10px 30px rgba(255,70,85,.22)}
+.btn-primary:hover{filter:brightness(1.08);transform:translateY(-2px)}
+.btn-primary:active{transform:translateY(0)}
+.btn-key{font-size:10.5px;letter-spacing:.24em;color:rgba(18,24,29,.62)}
+.hint-row{display:flex;align-items:center;gap:10px;margin-top:14px;font-size:11.5px;letter-spacing:.06em;color:rgba(137,150,162,.85);flex-wrap:wrap}
+.dot{color:rgba(255,70,85,.7)}
+
+/* ===== 游戏 ===== */
+#game{background:radial-gradient(120% 100% at 50% 0%,#122132 0%,#0c151d 62%,#080f15 100%)}
+#canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:none;touch-action:none}
+
+.hud-top{position:absolute;top:0;left:0;right:0;height:84px;z-index:2;display:flex;align-items:center;justify-content:space-between;
+  padding:0 26px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(9,16,23,.92),rgba(9,16,23,.45) 68%,transparent)}
+.hud-top::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,rgba(255,70,85,.55),rgba(236,232,225,.12) 40%,transparent 80%)}
+.hud-brand{display:flex;align-items:baseline;gap:8px}
+.hud-slash{font-family:var(--en);font-weight:700;color:var(--red);font-size:15px}
+.hud-brand-t{font-family:var(--en);font-size:11px;letter-spacing:.3em;color:rgba(236,232,225,.6)}
+.hud-stats{display:flex;align-items:center;gap:34px}
+.stat{display:flex;flex-direction:column;gap:3px;min-width:62px}
+.stat-label{font-size:10px;letter-spacing:.18em;color:var(--muted)}
+.stat-value{font-family:var(--en);font-size:26px;font-weight:600;line-height:1;letter-spacing:.02em}
+.stat-value.hot{color:var(--red)}
+.hud-timer{display:flex;flex-direction:column;align-items:flex-end;gap:6px;width:160px}
+.timer-value{font-family:var(--en);font-size:34px;font-weight:600;line-height:1;letter-spacing:.02em}
+.timer-value.warn{color:var(--red)}
+.timer-bar{width:100%;height:3px;background:rgba(236,232,225,.13)}
+.timer-bar span{display:block;height:100%;width:100%;background:var(--red);transition:width .08s linear}
+
+.hud-bottom{position:absolute;left:0;right:0;bottom:0;height:62px;z-index:2;display:flex;align-items:center;justify-content:space-between;
+  padding:0 26px;pointer-events:none;
+  background:linear-gradient(0deg,rgba(9,16,23,.88),rgba(9,16,23,.3) 60%,transparent)}
+.hud-info{display:flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.14em;color:rgba(236,232,225,.75)}
+.hud-info .sep{color:rgba(236,232,225,.28)}
+.hud-tips{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.08em;color:rgba(137,150,162,.9)}
+.hud-tips .sep{color:rgba(255,70,85,.55)}
+.sound-btn{pointer-events:auto;background:transparent;border:1px solid var(--line);color:rgba(236,232,225,.7);
+  font-family:inherit;font-size:11px;letter-spacing:.12em;padding:6px 12px;cursor:pointer;transition:.16s}
+.sound-btn:hover{border-color:rgba(255,70,85,.6);color:var(--ink)}
+
+.countdown{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;
+  font-family:var(--en);font-weight:700;font-size:clamp(76px,15vw,164px);letter-spacing:.06em;
+  color:var(--ink);opacity:0;pointer-events:none;text-shadow:0 0 40px rgba(255,70,85,.5)}
+@keyframes cdPop{0%{opacity:0;transform:translate(-50%,-50%) scale(1.7)}28%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:.92;transform:translate(-50%,-50%) scale(1)}}
+
+/* ===== 结算 ===== */
+#result{justify-content:center;align-items:center;padding:24px;background:rgba(6,11,16,.82);backdrop-filter:blur(6px)}
+.result-panel{position:relative;width:min(760px,94vw);max-height:92vh;overflow-y:auto;padding:30px 32px 28px;
+  background:linear-gradient(165deg,rgba(24,38,52,.96),rgba(12,20,28,.97));
+  border:1px solid rgba(236,232,225,.16);
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 28px),calc(100% - 28px) 100%,0 100%);
+  box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.result-panel::before{content:"";position:absolute;left:0;top:0;width:100%;height:2px;background:linear-gradient(90deg,var(--red),rgba(255,70,85,.25) 60%,transparent)}
+.res-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.res-kicker{font-family:var(--en);font-size:11px;letter-spacing:.28em;color:var(--muted)}
+.res-record{font-size:10px;letter-spacing:.16em;color:#12181d;background:#e6bd63;padding:4px 9px;display:none}
+.res-record.show{display:inline-block}
+.res-main{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.rank-box{display:flex;align-items:center;gap:16px}
+.rank-emblem{display:flex;align-items:center;justify-content:center;width:66px;height:66px;border:1px solid currentColor;
+  font-family:var(--en);font-size:30px;font-weight:600;
+  background:rgba(236,232,225,.04);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);}
+.rank-meta{display:flex;flex-direction:column;gap:4px}
+.rank-name{font-family:var(--en);font-size:26px;font-weight:600;letter-spacing:.08em;line-height:1}
+.rank-desc{font-size:11.5px;color:var(--muted);letter-spacing:.04em}
+.score-box{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.res-score{font-family:var(--en);font-size:clamp(40px,7vw,58px);font-weight:700;line-height:1;letter-spacing:.02em}
+.res-score-label{font-size:10px;letter-spacing:.22em;color:var(--muted)}
+.res-mode{font-size:10px;letter-spacing:.1em;color:rgba(236,232,225,.45);margin-top:6px}
+
+.res-acc{margin-top:22px}
+.res-acc-head{display:flex;align-items:center;justify-content:space-between;font-size:11px;letter-spacing:.14em;color:var(--muted);margin-bottom:7px}
+.res-acc-head .v{font-family:var(--en);font-size:15px;color:var(--ink);letter-spacing:.04em}
+.res-acc-bar{height:5px;background:rgba(236,232,225,.1);position:relative}
+.res-acc-bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--red),#ff8a94);transition:width .8s cubic-bezier(.2,.8,.2,1)}
+
+.res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:24px;background:rgba(236,232,225,.08);border:1px solid rgba(236,232,225,.08)}
+.res-stat{background:rgba(13,22,30,.9);padding:14px 16px;display:flex;flex-direction:column;gap:5px}
+.rs-label{font-size:10px;letter-spacing:.14em;color:var(--muted)}
+.rs-value{font-family:var(--en);font-size:19px;font-weight:500;letter-spacing:.03em;line-height:1.15}
+
+.res-actions{display:flex;gap:10px;margin-top:26px}
+.res-actions .btn-primary{margin-top:0;height:54px;font-size:15px;flex:1}
+.btn-ghost{height:54px;padding:0 24px;background:transparent;border:1px solid var(--line);color:var(--muted);
+  font-family:'Noto Sans SC',sans-serif;font-size:13px;letter-spacing:.14em;cursor:pointer;transition:.16s}
+.btn-ghost:hover{color:var(--ink);border-color:rgba(236,232,225,.4)}
+
+@media (max-width:760px){
+  .mode-grid{grid-template-columns:1fr}
+  .mc-desc{min-height:0}
+  .setup-row{grid-template-columns:1fr;gap:16px}
+  .best-col{align-items:flex-start}
+  .hud-stats{gap:16px}
+  .hud-tips{display:none}
+  .hud-brand{display:none}
+  .hud-top{height:78px;padding:0 16px}
+  .hud-bottom{padding:0 16px;height:54px}
+  .res-grid{grid-template-columns:repeat(2,1fr)}
+  .result-panel{padding:24px 20px}
+}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-glow a"></div>
+<div class="bg-glow b"></div>
+
+<!-- ===== 视图：菜单 ===== -->
+<section id="menu" class="screen active">
+  <div class="menu-inner">
+    <div class="brand-row"><span class="brand-slash">//</span><span class="brand-text">Valorant Aim Lab · 练枪房</span></div>
+    <h1><span class="h1-main">点小球练习</span><span class="h1-sub">RANGE / AIM TRAINER</span></h1>
+    <div class="title-rule"></div>
+    <p class="lead">瓦罗兰特风格的靶场特训。左键射击靶球，命中越快、越靠近靶心，得分越高。选一套训练模式，把准星压到球心。</p>
+
+    <div class="section-label"><span class="section-num">01</span><span class="section-text">训练模式</span></div>
+    <div class="mode-grid" id="modeGrid"></div>
+
+    <div class="setup-row">
+      <div>
+        <div class="section-label"><span class="section-num">02</span><span class="section-text">难度</span></div>
+        <div class="seg" id="diffSeg"></div>
+      </div>
+      <div>
+        <div class="section-label"><span class="section-num">03</span><span class="section-text">时长</span></div>
+        <div class="seg" id="timeSeg"></div>
+      </div>
+      <div class="best-col">
+        <span class="best-label">本模式最佳</span>
+        <span class="best-value" id="bestScore">--</span>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="startBtn"><span>开始训练</span><span class="btn-key">ENTER</span></button>
+    <div class="hint-row">
+      <span>鼠标左键射击</span><span class="dot">·</span><span>命中靶心额外加成</span><span class="dot">·</span>
+      <span>R 重开</span><span class="dot">·</span><span>ESC 返回</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 视图：游戏 ===== -->
+<section id="game" class="screen">
+  <canvas id="canvas"></canvas>
+  <div class="hud-top">
+    <div class="hud-brand"><span class="hud-slash">//</span><span class="hud-brand-t">AIM LAB</span></div>
+    <div class="hud-stats">
+      <div class="stat"><span class="stat-label">分数</span><span class="stat-value" id="hudScore">0</span></div>
+      <div class="stat"><span class="stat-label">命中率</span><span class="stat-value" id="hudAcc">--</span></div>
+      <div class="stat"><span class="stat-label">连击</span><span class="stat-value" id="hudStreak">0</span></div>
+    </div>
+    <div class="hud-timer">
+      <span class="timer-value" id="hudTime">60</span>
+      <div class="timer-bar"><span id="timeBar"></span></div>
+    </div>
+  </div>
+  <div class="hud-bottom">
+    <div class="hud-info"><span id="hudMode">定位靶</span><span class="sep">/</span><span id="hudDiff">普通</span></div>
+    <div class="hud-tips">
+      <span>左键射击</span><span class="sep">·</span><span>R 重开</span><span class="sep">·</span><span>ESC 返回</span>
+    </div>
+    <button class="sound-btn" id="soundBtn"><span>音效 ON</span></button>
+  </div>
+  <div class="countdown" id="countdown"></div>
+</section>
+
+<!-- ===== 视图：结算 ===== -->
+<section id="result" class="screen">
+  <div class="result-panel">
+    <div class="res-head">
+      <span class="res-kicker">训练结束 / RESULT</span>
+      <span class="res-record" id="resRecord">新纪录</span>
+    </div>
+    <div class="res-main">
+      <div class="rank-box">
+        <span class="rank-emblem" id="rankEmblem">钻</span>
+        <div class="rank-meta">
+          <span class="rank-name" id="rankName">钻石</span>
+          <span class="rank-desc" id="rankDesc">手感在线</span>
+        </div>
+      </div>
+      <div class="score-box">
+        <span class="res-score" id="resScore">0</span>
+        <span class="res-score-label">总得分</span>
+        <span class="res-mode" id="resMode">定位靶 / 普通 / 60s</span>
+      </div>
+    </div>
+    <div class="res-acc">
+      <div class="res-acc-head"><span>命中率</span><span class="v" id="resAccText">0%</span></div>
+      <div class="res-acc-bar"><span id="resAccBar"></span></div>
+    </div>
+    <div class="res-grid">
+      <div class="res-stat"><span class="rs-label">命中 / 射击</span><span class="rs-value" id="resHits">0 / 0</span></div>
+      <div class="res-stat"><span class="rs-label">最高连击</span><span class="rs-value" id="resStreak">0</span></div>
+      <div class="res-stat"><span class="rs-label">平均反应</span><span class="rs-value" id="resReact">--</span></div>
+      <div class="res-stat"><span class="rs-label">靶心命中</span><span class="rs-value" id="resCrit">0</span></div>
+      <div class="res-stat"><span class="rs-label">逃脱靶位</span><span class="rs-value" id="resEscaped">0</span></div>
+      <div class="res-stat"><span class="rs-label">单靶均分</span><span class="rs-value" id="resAvg">0</span></div>
+    </div>
+    <div class="res-actions">
+      <button class="btn-primary" id="againBtn"><span>再来一局</span><span class="btn-key">R</span></button>
+      <button class="btn-ghost" id="menuBtn"><span>返回菜单</span></button>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  'use strict';
+
+  var $ = function(id){ return document.getElementById(id); };
+  var canvas = $('canvas');
+  var ctx = canvas.getContext('2d');
+  var cdEl = $('countdown');
+
+  /* ================= 配置 ================= */
+  var CFG = {
+    modes: {
+      static:    { name:'定位靶', en:'STATIC',    desc:'靶位固定不动，练基础落点、稳定度与开火节奏。', rMul:1,    life:null, tag:'基础落点' },
+      flick:     { name:'闪现靶', en:'FLICK',     desc:'靶位高速瞬移，倒计时结束即换位，练甩枪与反应。', rMul:0.85, life:1.35, tag:'反应甩枪' },
+      precision: { name:'微调靶', en:'PRECISION', desc:'靶面缩小，中心靶心加成更高，练微调与爆头线。', rMul:0.6,  life:null, tag:'精细微调' }
+    },
+    diffs: {
+      easy:  { name:'简单', r:32, lifeBoost:1.4,  scoreMul:0.82 },
+      normal:{ name:'普通', r:24, lifeBoost:1.0,  scoreMul:1.0  },
+      hard:  { name:'困难', r:17, lifeBoost:0.75, scoreMul:1.22 }
+    }
+  };
+
+  var RANKS = [
+    { min:7600, name:'辐能', key:'辐', color:'#f6f2c8', desc:'靶场统治者，枪线如刀。' },
+    { min:6200, name:'不朽', key:'朽', color:'#ff9a8f', desc:'顶尖水准，几乎不给失误留位置。' },
+    { min:5000, name:'神话', key:'神', color:'#8ee6b2', desc:'实力强劲，节奏与准度都稳定。' },
+    { min:3900, name:'钻石', key:'钻', color:'#b79cff', desc:'手感在线，细节还能再抠一点。' },
+    { min:2900, name:'铂金', key:'铂', color:'#6fd6c8', desc:'基本功扎实，注意保持出手节奏。' },
+    { min:1900, name:'黄金', key:'金', color:'#e6bd63', desc:'中坚水准，继续打磨落点一致性。' },
+    { min:1050, name:'白银', key:'银', color:'#c4ccd6', desc:'已经有手感，稳定性还需加强。' },
+    { min:0,    name:'青铜', key:'青', color:'#a8785a', desc:'先练稳定度，再谈速度。' }
+  ];
+
+  /* ================= 状态 ================= */
+  var G = {
+    screen:'menu',
+    mode:'static', diff:'normal', duration:60,
+    playing:false,
+    elapsed:0, timeLeft:60,
+    score:0, hits:0, shots:0, crits:0, escaped:0, streak:0, bestStreak:0,
+    targets:[], particles:[], floaters:[], reactions:[],
+    mouse:{x:-999,y:-999,active:false},
+    hovered:null, countdown:0, goFlash:0, shake:0,
+    sound:true
+  };
+
+  var W = 0, H = 0, DPR = 1;
+  var PAD = { top:106, bottom:88, side:52 };
+
+  /* ================= 工具 ================= */
+  function clamp(v, a, b){ return v < a ? a : (v > b ? b : v); }
+  function rand(a, b){ return a + Math.random() * (b - a); }
+  function dist(x1, y1, x2, y2){ var dx = x1 - x2, dy = y1 - y2; return Math.sqrt(dx * dx + dy * dy); }
+  function easeOut(t){ return 1 - Math.pow(1 - t, 3); }
+
+  /* ================= 音效 ================= */
+  var AC = null, muted = false;
+  function initAudio(){
+    if (!AC) {
+      try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){ AC = null; }
+    }
+    if (AC && AC.state === 'suspended') { try { AC.resume(); } catch(e){} }
+  }
+  function blip(freq, dur, type, gain, slideTo){
+    if (!AC || muted) return;
+    var o = AC.createOscillator(), g = AC.createGain();
+    o.type = type || 'sine';
+    o.frequency.setValueAtTime(freq, AC.currentTime);
+    if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, AC.currentTime + dur);
+    g.gain.setValueAtTime(gain, AC.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001, AC.currentTime + dur);
+    o.connect(g); g.connect(AC.destination);
+    o.start(); o.stop(AC.currentTime + dur + 0.01);
+  }
+  function noiseBurst(dur, gain, freq){
+    if (!AC || muted) return;
+    var sr = AC.sampleRate, len = Math.floor(sr * dur);
+    var buf = AC.createBuffer(1, len, sr), data = buf.getChannelData(0);
+    for (var i = 0; i < len; i++){ data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2); }
+    var src = AC.createBufferSource(); src.buffer = buf;
+    var bp = AC.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = freq; bp.Q.value = 0.9;
+    var g = AC.createGain(); g.gain.value = gain;
+    src.connect(bp); bp.connect(g); g.connect(AC.destination); src.start();
+  }
+  function sfxShoot(){ noiseBurst(0.05, 0.10, 1500); blip(300, 0.05, 'square', 0.04, 150); }
+  function sfxHit(crit){
+    blip(crit ? 1500 : 1150, 0.07, 'triangle', 0.11);
+    blip(crit ? 2300 : 1750, 0.06, 'sine', 0.07);
+    if (crit) blip(880, 0.13, 'sine', 0.06);
+  }
+  function sfxMiss(){ blip(170, 0.07, 'square', 0.05, 110); }
+  function sfxEscape(){ blip(430, 0.11, 'sine', 0.045, 250); }
+  function sfxStart(){ blip(620, 0.08, 'triangle', 0.07); setTimeout(function(){ blip(980, 0.12, 'triangle', 0.06); }, 90); }
+
+  /* ================= 尺寸 ================= */
+  function resize(){
+    if (G.screen !== 'game') return;
+    var rect = canvas.getBoundingClientRect();
+    W = Math.max(1, Math.round(rect.width));
+    H = Math.max(1, Math.round(rect.height));
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(W * DPR);
+    canvas.height = Math.round(H * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  window.addEventListener('resize', resize);
+
+  /* ================= 菜单构建 ================= */
+  var modeGrid = $('modeGrid');
+  var modeKeys = ['static', 'flick', 'precision'];
+  modeKeys.forEach(function(key, i){
+    var cfg = CFG.modes[key];
+    var card = document.createElement('button');
+    card.className = 'mode-card' + (key === G.mode ? ' on' : '');
+    card.setAttribute('data-mode', key);
+    card.innerHTML =
+      '<span class="mc-index">0' + (i + 1) + '</span>' +
+      '<span class="mc-en">' + cfg.en + '</span>' +
+      '<span class="mc-name">' + cfg.name + '</span>' +
+      '<span class="mc-desc">' + cfg.desc + '</span>' +
+      '<span class="mc-tag">' + cfg.tag + '</span>';
+    card.addEventListener('click', function(){
+      G.mode = key;
+      syncModeCards();
+      updateBest();
+    });
+    modeGrid.appendChild(card);
+  });
+
+  function syncModeCards(){
+    var cards = modeGrid.querySelectorAll('.mode-card');
+    for (var i = 0; i < cards.length; i++){
+      cards[i].classList.toggle('on', cards[i].getAttribute('data-mode') === G.mode);
+    }
+  }
+
+  function buildSeg(container, values, current, labelMap, onChange){
+    values.forEach(function(v){
+      var btn = document.createElement('button');
+      btn.className = 'seg-btn' + (v === current ? ' on' : '');
+      btn.setAttribute('data-val', String(v));
+      btn.textContent = labelMap(v);
+      btn.addEventListener('click', function(){
+        var all = container.querySelectorAll('.seg-btn');
+        for (var i = 0; i < all.length; i++) all[i].classList.remove('on');
+        btn.classList.add('on');
+        onChange(v);
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  var diffSeg = $('diffSeg'), timeSeg = $('timeSeg');
+  buildSeg(diffSeg, ['easy', 'normal', 'hard'], G.diff, function(v){ return CFG.diffs[v].name; }, function(v){
+    G.diff = v; updateBest();
+  });
+  buildSeg(timeSeg, [30, 60, 90], G.duration, function(v){ return v + ' 秒'; }, function(v){
+    G.duration = v; updateBest();
+  });
+
+  function bestKey(){ return 'aimlab_best_v1_' + G.mode + '_' + G.diff; }
+  function getBest(){
+    try { return Number(localStorage.getItem(bestKey()) || 0); } catch(e){ return 0; }
+  }
+  function saveBest(v){
+    try { localStorage.setItem(bestKey(), String(v)); } catch(e){}
+  }
+  function updateBest(){
+    var b = getBest();
+    $('bestScore').textContent = b > 0 ? b : '--';
+  }
+  updateBest();
+
+  /* ================= 屏幕切换 ================= */
+  var screens = { menu: $('menu'), game: $('game'), result: $('result') };
+  function showScreen(name){
+    Object.keys(screens).forEach(function(k){
+      screens[k].classList.toggle('active', k === name);
+    });
+    G.screen = name;
+    if (name === 'game') { resize(); }
+  }
+
+  /* ================= 游戏流程 ================= */
+  function resetState(){
+    G.playing = false;
+    G.elapsed = 0; G.timeLeft = G.duration;
+    G.score = 0; G.hits = 0; G.shots = 0; G.crits = 0; G.escaped = 0;
+    G.streak = 0; G.bestStreak = 0; G.reactions = [];
+    G.targets = []; G.particles = []; G.floaters = [];
+    G.countdown = 0; G.goFlash = 0; G.shake = 0; G.hovered = null;
+    setCountdown('');
+    updateHud();
+  }
+
+  var lastCdText = '';
+  function setCountdown(txt){
+    if (txt === lastCdText) return;
+    lastCdText = txt;
+    cdEl.textContent = txt;
+    if (!txt) { cdEl.style.opacity = '0'; cdEl.style.animation = 'none'; return; }
+    cdEl.style.opacity = '1';
+    cdEl.style.animation = 'none';
+    void cdEl.offsetWidth;
+    cdEl.style.animation = 'cdPop .35s ease-out';
+  }
+
+  function startGame(){
+    initAudio();
+    resetState();
+    showScreen('game');
+    $('hudMode').textContent = CFG.modes[G.mode].name;
+    $('hudDiff').textContent = CFG.diffs[G.diff].name;
+    G.mouse.active = false;
+    G.countdown = 3.0;
+    setCountdown('3');
+    sfxStart();
+  }
+
+  function spawnTarget(){
+    var diff = CFG.diffs[G.diff], mode = CFG.modes[G.mode];
+    var r = diff.r * mode.rMul;
+    var left = PAD.side + r, right = W - PAD.side - r;
+    var top = PAD.top + r, bottom = H - PAD.bottom - r;
+    if (right <= left || bottom <= top) return;
+
+    var x = 0, y = 0;
+    for (var i = 0; i < 26; i++){
+      x = rand(left, right);
+      y = rand(top, bottom);
+      var nearMouse = G.mouse.active && dist(x, y, G.mouse.x, G.mouse.y) < r + 72;
+      var nearOther = false;
+      for (var j = 0; j < G.targets.length; j++){
+        var t = G.targets[j];
+        if (dist(x, y, t.x, t.y) < r + t.r + 26) { nearOther = true; break; }
+      }
+      if (!nearMouse && !nearOther) break;
+    }
+    var life = mode.life ? mode.life * diff.lifeBoost : null;
+    G.targets.push({ x:x, y:y, r:r, age:0, life:life, spawnT:G.elapsed, dead:false });
+  }
+
+  function hitTest(x, y){
+    for (var i = G.targets.length - 1; i >= 0; i--){
+      var t = G.targets[i];
+      if (!t.dead && dist(x, y, t.x, t.y) <= t.r) return t;
+    }
+    return null;
+  }
+
+  function addFloater(x, y, text, color, big){
+    G.floaters.push({ x:x, y:y, text:text, color:color || '#ece8e1', life:0.9, max:0.9, big:!!big });
+  }
+
+  function burst(x, y, color, count){
+    for (var i = 0; i < count; i++){
+      var a = Math.random() * Math.PI * 2;
+      var sp = rand(90, 360);
+      G.particles.push({
+        x:x, y:y, vx:Math.cos(a) * sp, vy:Math.sin(a) * sp - 60,
+        life: rand(0.28, 0.6), max:0.6, size: rand(1.5, 3.6), color:color, ring:false
+      });
+    }
+    G.particles.push({ x:x, y:y, ring:true, life:0.36, max:0.36, r0:8, color:color });
+  }
+
+  function shoot(x, y){
+    if (!G.playing) return;
+    G.shots++;
+    sfxShoot();
+    var t = hitTest(x, y);
+
+    if (t){
+      var d = dist(x, y, t.x, t.y);
+      var reaction = Math.max(0.03, G.elapsed - t.spawnT);
+      var crit = d <= t.r * 0.34;
+      var speedBonus = clamp(1 - (reaction - 0.35) / 1.6, 0, 1) * 55;
+      var mult = 1 + Math.min(G.streak, 12) * 0.05;
+      var gain = Math.round((45 + speedBonus + (crit ? 45 : 0)) * mult * CFG.diffs[G.diff].scoreMul);
+
+      G.score += gain;
+      G.hits++;
+      if (crit) G.crits++;
+      G.streak++;
+      if (G.streak > G.bestStreak) G.bestStreak = G.streak;
+      G.reactions.push(reaction);
+
+      t.dead = true;
+      G.targets = G.targets.filter(function(o){ return o !== t; });
+
+      burst(t.x, t.y, crit ? '#ffffff' : '#ff4655', crit ? 20 : 13);
+      addFloater(t.x, t.y - t.r - 16, '+' + gain, crit ? '#ffffff' : '#ece8e1', crit);
+      if (crit) addFloater(t.x, t.y - t.r - 44, '靶心 HIT', '#ff4655', false);
+      G.shake = crit ? 6 : 4;
+      sfxHit(crit);
+      spawnTarget();
+    } else {
+      G.streak = 0;
+      G.shake = 2;
+      burst(x, y, '#8a97a3', 6);
+      addFloater(x, y - 22, 'MISS', '#8a97a3', false);
+      sfxMiss();
+    }
+    updateHud();
+  }
+
+  function endGame(){
+    G.playing = false;
+    setCountdown('');
+
+    var acc = G.shots > 0 ? G.hits / G.shots : 0;
+    var avgReact = 0;
+    for (var i = 0; i < G.reactions.length; i++) avgReact += G.reactions[i];
+    if (G.reactions.length) avgReact /= G.reactions.length;
+
+    var norm = G.score / (G.duration / 60);
+    var rank = RANKS[RANKS.length - 1];
+    for (var r = 0; r < RANKS.length; r++){
+      if (norm >= RANKS[r].min) { rank = RANKS[r]; break; }
+    }
+
+    $('resScore').textContent = G.score;
+    $('resAccText').textContent = Math.round(acc * 100) + '%';
+    $('resAccBar').style.width = '0%';
+    setTimeout(function(){ $('resAccBar').style.width = Math.round(acc * 100) + '%'; }, 60);
+    $('resHits').textContent = G.hits + ' / ' + G.shots;
+    $('resStreak').textContent = G.bestStreak;
+    $('resReact').textContent = avgReact > 0 ? Math.round(avgReact * 1000) + ' ms' : '--';
+    $('resCrit').textContent = G.crits;
+    $('resEscaped').textContent = G.escaped;
+    $('resAvg').textContent = G.hits > 0 ? Math.round(G.score / G.hits) : 0;
+    $('resMode').textContent = CFG.modes[G.mode].name + ' / ' + CFG.diffs[G.diff].name + ' / ' + G.duration + 's';
+
+    $('rankName').textContent = rank.name;
+    $('rankDesc').textContent = rank.desc;
+    $('rankEmblem').textContent = rank.key;
+    $('rankEmblem').style.color = rank.color;
+    $('rankEmblem').style.textShadow = '0 0 22px ' + rank.color + '55';
+
+    var prevBest = getBest();
+    var isRecord = G.score > prevBest && G.score > 0;
+    $('resRecord').classList.toggle('show', isRecord);
+    if (isRecord) saveBest(G.score);
+    updateBest();
+
+    showScreen('result');
+  }
+
+  /* ================= 更新 ================= */
+  function update(dt){
+    if (G.screen === 'game'){
+      if (G.countdown > 0){
+        G.countdown -= dt;
+        var n = Math.ceil(G.countdown);
+        if (n > 0) setCountdown(String(n));
+        if (G.countdown <= 0){
+          G.countdown = 0;
+          G.playing = true;
+          G.elapsed = 0;
+          G.timeLeft = G.duration;
+          setCountdown('开始');
+          spawnTarget();
+          setTimeout(function(){
+            if (G.screen === 'game' && G.playing) setCountdown('');
+          }, 600);
+        }
+      }
+
+      if (G.playing){
+        G.elapsed += dt;
+        G.timeLeft -= dt;
+
+        var escapedNow = false, escapedPos = null;
+        for (var i = 0; i < G.targets.length; i++){
+          var t = G.targets[i];
+          t.age += dt;
+          if (t.life && t.age >= t.life && !t.dead) {
+            t.dead = true; escapedNow = true;
+            if (!escapedPos) escapedPos = { x: t.x, y: t.y };
+          }
+        }
+        if (escapedNow){
+          G.targets = G.targets.filter(function(o){ return !o.dead; });
+          G.escaped++;
+          G.streak = 0;
+          sfxEscape();
+          addFloater(escapedPos.x, escapedPos.y - 20, 'MISS', '#8a97a3', false);
+          spawnTarget();
+        }
+
+        if (G.timeLeft <= 0){
+          G.timeLeft = 0;
+          endGame();
+          return;
+        }
+      }
+    }
+
+    for (var p = G.particles.length - 1; p >= 0; p--){
+      var pa = G.particles[p];
+      pa.life -= dt;
+      if (pa.life <= 0) { G.particles.splice(p, 1); continue; }
+      if (!pa.ring){
+        pa.x += pa.vx * dt; pa.y += pa.vy * dt;
+        pa.vy += 260 * dt;
+        pa.vx *= 0.985;
+      }
+    }
+    for (var f = G.floaters.length - 1; f >= 0; f--){
+      var fl = G.floaters[f];
+      fl.life -= dt;
+      if (fl.life <= 0) { G.floaters.splice(f, 1); continue; }
+      fl.y -= 34 * dt;
+    }
+    if (G.shake > 0) G.shake = Math.max(0, G.shake - dt * 22);
+  }
+
+  function updateHud(){
+    $('hudScore').textContent = G.score;
+    $('hudAcc').textContent = G.shots > 0 ? Math.round(G.hits / G.shots * 100) + '%' : '--';
+    $('hudStreak').textContent = G.streak;
+    var st = $('hudStreak');
+    st.classList.toggle('hot', G.streak >= 3);
+
+    var sec = Math.ceil(G.timeLeft);
+    $('hudTime').textContent = sec;
+    $('hudTime').classList.toggle('warn', sec <= 10);
+    var pct = G.duration > 0 ? clamp(G.timeLeft / G.duration, 0, 1) * 100 : 0;
+    $('timeBar').style.width = pct.toFixed(2) + '%';
+  }
+
+  /* ================= 绘制 ================= */
+  function drawTarget(t, hovered){
+    var age = t.age;
+    var grow = Math.min(1, age / 0.18);
+    var s = 0.55 + 0.45 * easeOut(grow);
+
+    ctx.save();
+    ctx.translate(t.x, t.y);
+    ctx.scale(s, s);
+
+    // 外发光
+    var glow = ctx.createRadialGradient(0, 0, t.r * 0.2, 0, 0, t.r * 1.9);
+    glow.addColorStop(0, hovered ? 'rgba(255,255,255,.30)' : 'rgba(255,70,85,.30)');
+    glow.addColorStop(0.5, 'rgba(255,70,85,.11)');
+    glow.addColorStop(1, 'rgba(255,70,85,0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(0, 0, t.r * 1.9, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 球体
+    var body = ctx.createRadialGradient(-t.r * 0.32, -t.r * 0.38, t.r * 0.08, 0, 0, t.r * 1.05);
+    body.addColorStop(0, '#ff8a92');
+    body.addColorStop(0.45, '#ff4655');
+    body.addColorStop(1, '#9c1f2c');
+    ctx.fillStyle = body;
+    ctx.beginPath();
+    ctx.arc(0, 0, t.r, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 外环
+    ctx.lineWidth = 1.6;
+    ctx.strokeStyle = hovered ? '#ffffff' : 'rgba(236,232,225,.85)';
+    ctx.beginPath();
+    ctx.arc(0, 0, t.r - 1.2, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // 内环（靶心判定圈）
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(236,232,225,.38)';
+    ctx.beginPath();
+    ctx.arc(0, 0, t.r * 0.6, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.strokeStyle = 'rgba(236,232,225,.55)';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.arc(0, 0, t.r * 0.34, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // 靶心
+    ctx.fillStyle = 'rgba(236,232,225,.95)';
+    ctx.beginPath();
+    ctx.arc(0, 0, t.r * 0.11, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 存活倒计时
+    if (t.life){
+      var remain = clamp(1 - age / t.life, 0, 1);
+      var urgent = remain < 0.32;
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = urgent
+        ? 'rgba(255,70,85,' + (0.55 + 0.45 * Math.abs(Math.sin(age * 16))).toFixed(2) + ')'
+        : 'rgba(236,232,225,.75)';
+      ctx.beginPath();
+      ctx.arc(0, 0, t.r + 7, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * remain);
+      ctx.stroke();
+    }
+
+    ctx.restore();
+  }
+
+  function drawCrosshair(){
+    if (!G.mouse.active) return;
+    var x = G.mouse.x, y = G.mouse.y;
+    var hot = G.hovered;
+    var gap = hot ? 4 : 6;
+    var len = hot ? 7 : 9;
+    var col = hot ? '#ff4655' : '#ece8e1';
+
+    ctx.save();
+    ctx.lineCap = 'butt';
+
+    // 描边
+    ctx.strokeStyle = 'rgba(0,0,0,.55)';
+    ctx.lineWidth = 4;
+    drawCrossLines(x, y, gap, len);
+    ctx.strokeStyle = col;
+    ctx.lineWidth = 2;
+    drawCrossLines(x, y, gap, len);
+
+    // 中心点
+    ctx.fillStyle = col;
+    ctx.beginPath();
+    ctx.arc(x, y, 1.6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+  function drawCrossLines(x, y, gap, len){
+    ctx.beginPath();
+    ctx.moveTo(x, y - gap); ctx.lineTo(x, y - gap - len);
+    ctx.moveTo(x, y + gap); ctx.lineTo(x, y + gap + len);
+    ctx.moveTo(x - gap, y); ctx.lineTo(x - gap - len, y);
+    ctx.moveTo(x + gap, y); ctx.lineTo(x + gap + len, y);
+    ctx.stroke();
+  }
+
+  function draw(){
+    if (G.screen !== 'game') return;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+
+    // 悬停检测
+    G.hovered = G.mouse.active ? hitTest(G.mouse.x, G.mouse.y) : null;
+
+    ctx.save();
+    if (G.shake > 0){
+      ctx.translate(rand(-G.shake, G.shake) * 0.5, rand(-G.shake, G.shake) * 0.5);
+    }
+
+    // 靶子
+    for (var i = 0; i < G.targets.length; i++){
+      drawTarget(G.targets[i], G.targets[i] === G.hovered);
+    }
+
+    // 粒子
+    for (var p = 0; p < G.particles.length; p++){
+      var pa = G.particles[p];
+      var alpha = clamp(pa.life / pa.max, 0, 1);
+      if (pa.ring){
+        var rad = pa.r0 + (1 - pa.life / pa.max) * 46;
+        ctx.strokeStyle = pa.color;
+        ctx.globalAlpha = alpha * 0.8;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(pa.x, pa.y, rad, 0, Math.PI * 2);
+        ctx.stroke();
+      } else {
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = pa.color;
+        ctx.fillRect(pa.x - pa.size / 2, pa.y - pa.size / 2, pa.size, pa.size * 1.6);
+      }
+    }
+    ctx.globalAlpha = 1;
+
+    // 浮动文字
+    for (var f = 0; f < G.floaters.length; f++){
+      var fl = G.floaters[f];
+      var fa = clamp(fl.life / fl.max, 0, 1);
+      ctx.globalAlpha = fa;
+      ctx.fillStyle = fl.color;
+      ctx.font = (fl.big ? '600 22px ' : '500 15px ') + "'Oswald','Noto Sans SC',sans-serif";
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(fl.text, fl.x, fl.y);
+      ctx.globalAlpha = 1;
+    }
+
+    ctx.restore();
+
+    // 准星
+    drawCrosshair();
+  }
+
+  /* ================= 主循环 ================= */
+  var lastTs = performance.now();
+  function loop(ts){
+    var dt = Math.min(0.05, (ts - lastTs) / 1000);
+    lastTs = ts;
+    update(dt);
+    draw();
+    if (G.screen === 'game') updateHud();
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  /* ================= 输入 ================= */
+  canvas.addEventListener('pointermove', function(e){
+    var rect = canvas.getBoundingClientRect();
+    G.mouse.x = e.clientX - rect.left;
+    G.mouse.y = e.clientY - rect.top;
+    G.mouse.active = true;
+  }, { passive: true });
+
+  canvas.addEventListener('pointerdown', function(e){
+    e.preventDefault();
+    if (e.button !== undefined && e.button !== 0) return;
+    var rect = canvas.getBoundingClientRect();
+    G.mouse.x = e.clientX - rect.left;
+    G.mouse.y = e.clientY - rect.top;
+    G.mouse.active = true;
+    initAudio();
+    shoot(G.mouse.x, G.mouse.y);
+  }, { passive: false });
+
+  canvas.addEventListener('pointerleave', function(){ G.mouse.active = false; });
+  canvas.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Enter'){
+      if (G.screen === 'menu') { e.preventDefault(); startGame(); }
+      else if (G.screen === 'result') { e.preventDefault(); startGame(); }
+    }
+    if ((e.key === 'r' || e.key === 'R') && G.screen !== 'menu'){
+      startGame();
+    }
+    if (e.key === 'Escape' && G.screen !== 'menu'){
+      G.playing = false;
+      setCountdown('');
+      showScreen('menu');
+    }
+  });
+
+  /* ================= 按钮 ================= */
+  $('startBtn').addEventListener('click', startGame);
+  $('againBtn').addEventListener('click', startGame);
+  $('menuBtn').addEventListener('click', function(){
+    G.playing = false;
+    showScreen('menu');
+  });
+
+  var soundBtn = $('soundBtn');
+  soundBtn.addEventListener('click', function(){
+    muted = !muted;
+    G.sound = !muted;
+    soundBtn.innerHTML = '<span>音效 ' + (muted ? 'OFF' : 'ON') + '</span>';
+    if (!muted) initAudio();
+  });
+
+  // 初始化
+  resize();
+  updateHud();
+})();
+</script>
+</body>
+</html>
